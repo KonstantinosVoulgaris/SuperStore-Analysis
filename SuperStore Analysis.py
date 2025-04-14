@@ -62,12 +62,14 @@ query_options = {
         ORDER BY Total_Profit DESC 
         LIMIT 5;
     ''',
+    
     "Regions with the highest sales": '''
         SELECT Region, SUM(Sales) AS Total_Sales 
         FROM superstore 
         GROUP BY Region 
         ORDER BY Total_Sales DESC;
     ''',
+    
     "Top 10 cities by sales": '''
         SELECT City, SUM(Sales) AS Total_Sales 
         FROM superstore 
@@ -75,6 +77,7 @@ query_options = {
         ORDER BY Total_Sales DESC 
         LIMIT 10;
     ''',
+    
     "Top 5 categories by quantity": '''
         SELECT Category, SUM(Quantity) AS Total_Quantity 
         FROM superstore 
@@ -82,6 +85,7 @@ query_options = {
         ORDER BY Total_Quantity DESC 
         LIMIT 5;
     ''',
+    
     "Top 5 cities by profit": '''
         SELECT City, SUM(Profit) AS Total_Profit 
         FROM superstore 
@@ -89,6 +93,7 @@ query_options = {
         ORDER BY Total_Profit DESC 
         LIMIT 5;
     ''',
+    
     "Top 5 orders with highest discounts": '''
         SELECT OrderID, Discount, Sales, Profit 
         FROM superstore 
