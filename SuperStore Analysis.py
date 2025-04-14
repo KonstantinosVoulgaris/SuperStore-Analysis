@@ -4,7 +4,7 @@ import pandas as pd
 
 st.title("📊 Superstore Analyzer")
 
-# Δημιουργία/φόρτωση της βάσης δεδομένων
+# Create/load the database
 def create_and_load_db():
     conn = sqlite3.connect('superstore.db')
     cursor = conn.cursor()
@@ -48,48 +48,48 @@ def create_and_load_db():
 
 conn = create_and_load_db()
 
-# Εμφάνιση πλήρους πίνακα
-if st.checkbox("📋 Εμφάνισε όλα τα δεδομένα"):
+# Show full table
+if st.checkbox("📋 Show all data"):
     df = pd.read_sql_query("SELECT * FROM superstore", conn)
     st.dataframe(df)
 
-# Επιλογή ανάλυσης
+# Analysis options
 query_options = {
-    "Top 5 πιο κερδοφόρες κατηγορίες": '''
+    "Top 5 most profitable categories": '''
         SELECT Category, SUM(Profit) AS Total_Profit 
         FROM superstore 
         GROUP BY Category 
         ORDER BY Total_Profit DESC 
         LIMIT 5;
     ''',
-    "Περιοχές με τις περισσότερες πωλήσεις": '''
+    "Regions with the highest sales": '''
         SELECT Region, SUM(Sales) AS Total_Sales 
         FROM superstore 
         GROUP BY Region 
         ORDER BY Total_Sales DESC;
     ''',
-    "Top 10 πόλεις με τις υψηλότερες πωλήσεις": '''
+    "Top 10 cities by sales": '''
         SELECT City, SUM(Sales) AS Total_Sales 
         FROM superstore 
         GROUP BY City 
         ORDER BY Total_Sales DESC 
         LIMIT 10;
     ''',
-    "Top 5 κατηγορίες βάσει ποσότητας": '''
+    "Top 5 categories by quantity": '''
         SELECT Category, SUM(Quantity) AS Total_Quantity 
         FROM superstore 
         GROUP BY Category 
         ORDER BY Total_Quantity DESC 
         LIMIT 5;
     ''',
-    "Top 5 πόλεις με τα περισσότερα κέρδη": '''
+    "Top 5 cities by profit": '''
         SELECT City, SUM(Profit) AS Total_Profit 
         FROM superstore 
         GROUP BY City 
         ORDER BY Total_Profit DESC 
         LIMIT 5;
     ''',
-    "Top 5 παραγγελίες με τη μεγαλύτερη έκπτωση": '''
+    "Top 5 orders with highest discounts": '''
         SELECT OrderID, Discount, Sales, Profit 
         FROM superstore 
         ORDER BY Discount DESC 
@@ -97,12 +97,12 @@ query_options = {
     '''
 }
 
-option = st.selectbox("🔎 Διάλεξε ανάλυση", list(query_options.keys()))
-if st.button("📊 Εκτέλεση ανάλυσης"):
+option = st.selectbox("🔎 Choose analysis", list(query_options.keys()))
+if st.button("📊 Run analysis"):
     query = query_options[option]
     result = pd.read_sql_query(query, conn)
-    st.subheader(f"Αποτελέσματα: {option}")
+    st.subheader(f"Results: {option}")
     st.dataframe(result)
 
-# Κλείσιμο σύνδεσης (μόνο όταν τελειώσει η εφαρμογή)
-# conn.close()  # Δεν το κλείνουμε εδώ γιατί streamlit κάνει re-run κάθε φορά
+# Close connection (only when the app is done running)
+# conn.close()  # Not closing here because Streamlit reruns on every interaction
